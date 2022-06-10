@@ -5,34 +5,34 @@ fi
 
 ## finished setting up ------
 strPath="$(python -c 'import site; print(site.getsitepackages()[0])')"
-strweb="${strPath}/server/common/web/static/."
+strweb="${strPath}/backend/czi_hosted/common/web/static/."
 
-cp VIPInterface.py $strPath/server/app/.
+cp VIPInterface.py $strPath/backend/czi_hosted/app/.
 cp interface.html $strweb
-cp vip.env $strPath/server/app/. 2>/dev/null | true
+cp vip.env $strPath/backend/czi_hosted/app/. 2>/dev/null | true
 
-cp fgsea.R $strPath/server/app/.
-mkdir -p $strPath/server/app/gsea
-cp gsea/*gmt $strPath/server/app/gsea
-cp complexHeatmap.R $strPath/server/app/.
-cp volcano.R $strPath/server/app/.
+cp fgsea.R $strPath/backend/czi_hosted/app/.
+mkdir -p $strPath/backend/czi_hosted/app/gsea
+cp gsea/*gmt $strPath/backend/czi_hosted/app/gsea
+cp complexHeatmap.R $strPath/backend/czi_hosted/app/.
+cp volcano.R $strPath/backend/czi_hosted/app/.
 
 if [ -n "$1" ]; then
-  cp Density2D.R $strPath/server/app/.
-  cp bubbleMap.R $strPath/server/app/.
-  cp violin.R $strPath/server/app/.
-  cp volcano.R $strPath/server/app/.
-  cp browserPlot.R $strPath/server/app/.
-  cp complexHeatmap.R $strPath/server/app/.
+  cp Density2D.R $strPath/backend/czi_hosted/app/.
+  cp bubbleMap.R $strPath/backend/czi_hosted/app/.
+  cp violin.R $strPath/backend/czi_hosted/app/.
+  cp volcano.R $strPath/backend/czi_hosted/app/.
+  cp browserPlot.R $strPath/backend/czi_hosted/app/.
+  cp complexHeatmap.R $strPath/backend/czi_hosted/app/.
   if [ "$(uname -s)" = "Darwin" ]; then
-    sed -i .bak "s|route(request.data,current_app.app_config, \"/tmp\")|route(request.data,current_app.app_config)|" "$strPath/server/app/app.py"
-    sed -i .bak "s|MAX_LAYOUTS *= *[0-9]\+|MAX_LAYOUTS = 300|" "$strPath/server/common/constants.py"
+    sed -i .bak "s|route(request.data,current_app.app_config, \"/tmp\")|route(request.data,current_app.app_config)|" "$strPath/backend/czi_hosted/app/app.py"
+    sed -i .bak "s|MAX_LAYOUTS *= *[0-9]\+|MAX_LAYOUTS = 300|" "$strPath/backend/common/constants.py"
   else
-    sed -i "s|route(request.data,current_app.app_config, \"/tmp\")|route(request.data,current_app.app_config)|" "$strPath/server/app/app.py"
-    sed -i "s|MAX_LAYOUTS *= *[0-9]\+|MAX_LAYOUTS = 300|" "$strPath/server/common/constants.py"
+    sed -i "s|route(request.data,current_app.app_config, \"/tmp\")|route(request.data,current_app.app_config)|" "$strPath/backend/czi_hosted/app/app.py"
+    sed -i "s|MAX_LAYOUTS *= *[0-9]\+|MAX_LAYOUTS = 300|" "$strPath/backend/common/constants.py"
   fi
 
-  find ./cellxgene/server/ -name "decode_fbs.py" -exec cp {} $strPath/server/app/. \;
+  find ./cellxgene/backend/ -name "decode_fbs.py" -exec cp {} $strPath/backend/czi_hosted/app/. \;
 fi
 
 echo -e "\nls -l $strweb\n"

@@ -2,7 +2,7 @@ import requests
 import json
 import traceback
 import sqlite3
-import server.app.decode_fbs as decode_fbs
+import backend.czi_hosted.app.decode_fbs as decode_fbs
 import scanpy as sc
 import anndata as ad
 import pandas as pd
@@ -32,7 +32,7 @@ strExePath = os.path.dirname(os.path.abspath(__file__))
 import pprint
 ppr = pprint.PrettyPrinter(depth=6)
 
-import server.compute.diffexp_generic as diffDefault
+import backend.common.compute.diffexp_generic as diffDefault
 import pickle
 from pyarrow import feather
 
@@ -67,7 +67,7 @@ def route(data,appConfig):
     return 'ERROR @server: '+traceback.format_exc() # 'ERROR @server: {}, {}'.format(type(e),str(e))
   #return distributeTask(data["method"])(data)
 
-import server.app.app as app
+import backend.czi_hosted.app.app as app
 
 def initialization(data,appConfig):
   # obtain the server host information
@@ -77,13 +77,9 @@ def initialization(data,appConfig):
   data.update(VIPenv)
 
   # updatting the hosting data information
-  if appConfig.is_multi_dataset():
-    data["url_dataroot"]=appConfig.server_config.multi_dataset__dataroot['d']['base_url']
-    data['h5ad']=os.path.join(appConfig.server_config.multi_dataset__dataroot['d']['dataroot'], data["dataset"])
-  else:
-    data["url_dataroot"]=None
-    data["dataset"]=None
-    data['h5ad']=appConfig.server_config.single_dataset__datapath
+  data["url_dataroot"]=None
+  data["dataset"]=None
+  data['h5ad']=appConfig.server_config.single_dataset__datapath
 
   # setting the plotting options
   if 'figOpt' in data.keys():

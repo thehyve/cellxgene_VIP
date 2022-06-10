@@ -35,9 +35,9 @@ rm -rf cellxgene
 git clone https://github.com/chanzuckerberg/cellxgene.git
 cd cellxgene
 #git checkout bedbc87ed6178cd00a586feac3e99d4912d1c74e # v 0.16.7  # 735eb11eb78b5e6c35ba84438970d0ce369604e1 (v0.15.0)
-git checkout bdfd9fe0a5462a0c139675fe10356765d2bbd95b # v 0.16.8
-sed -i 's|anndata>=0.7.0|anndata>=0.7.4|' 'server/requirements.txt'
-sed -i 's|scanpy==1.4.6|scanpy==1.6.1|' 'server/requirements.txt'
+git checkout 0.17.0
+sed -i 's|anndata>=0.7.0|anndata>=0.7.4|' 'backend/czi_hosted/requirements.txt'
+sed -i 's|scanpy==1.4.6|scanpy==1.6.1|' 'backend/czi_hosted/requirements.txt'
 cd ..
 
 ## update the client-side source code of cellxgene for VIP
@@ -57,10 +57,10 @@ sed -i "s|const *scaleMax *= *[0-9\.]\+|const scaleMax = 50000|; s|const *scaleM
 ## update the server-side source code of cellxgene for VIP
 ## Please change /tmp if different temporary directory is used in your local environment
 echo '
-from server.app.VIPInterface import route
+from backend.czi_hosted.app.VIPInterface import route
 @webbp.route("/VIP", methods=["POST"])
 def VIP():
-    return route(request.data,current_app.app_config)' >> cellxgene/server/app/app.py
+    return route(request.data,current_app.app_config)' >> cellxgene/backend/czi_hosted/app/app.py
 
 
 # Old branch for nicer plots that are incorporated into ver 1.6.1 now
@@ -69,7 +69,7 @@ def VIP():
 #pip install scanpy/
 
 cd cellxgene
-make pydist
+make pydist-czi-hosted
 make install-dist
 cd ..
 
